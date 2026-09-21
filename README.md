@@ -59,6 +59,17 @@ Each result contains typed option scores, timing, the exact model revision, and 
 
 If every row has the same exact state, switch to `--mode shared` to prefill it once and evaluate the criteria in parallel.
 
+## Jev-compatible server
+
+`semif-serve` exposes the [Jev HTTP API](https://docs.typesafe.ai/api) (`POST /v1/systemone`) over the same open scorers. `noul`, `choice`, and `score` questions are supported. Several questions over one state prefill it once and branch per question.
+
+```bash
+export SEMIF_API_KEY=change-me   # optional bearer key; omit for no auth
+semif-serve --model Qwen/Qwen3.5-4B --revision 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a --port 8000
+```
+
+Differences from the hosted service: the `model` field is accepted but ignored and the reply reports `semif-direct-v1`; `choice` allows at most 16 options; `output_tokens` is always 0; probabilities are uncalibrated. It binds to 127.0.0.1 by default and serializes requests on one GPU.
+
 ## How it works
 
 ```mermaid
